@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Publisher = require('../lib/models/Publisher');
 
 describe('book-store routes', () => {
   beforeEach(() => {
@@ -22,5 +23,23 @@ describe('book-store routes', () => {
       state: 'OR',
       country: 'USA',
     });
+  });
+  it('should be able to list all publishers', async () => {
+    await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+    const res = await request(app).get('/api/v1/publishers');
+    expect(res.body).toEqual([
+      {
+        id: expect.any(String),
+        name: 'test',
+        city: 'portland',
+        state: 'OR',
+        country: 'USA',
+      },
+    ]);
   });
 });
