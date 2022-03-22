@@ -55,5 +55,12 @@ describe('book-store routes', () => {
     expect(res.body).toEqual(expected);
     expect(await Reviewer.findReviewerById(reviewer.id)).toEqual(expected);
   });
-    
+ 
+  it('deletes a reviewer by id', async () => {
+    const expected = await Reviewer.insert({ name: 'Sally', company: 'The Cool Company' });
+    const res = await request(app).delete(`/api/v1/reviewers/${expected.id}`);
+      
+    expect(res.body).toEqual(expected);
+    expect(await Reviewer.findReviewerById(expected.id)).toBeNull();
+  });
 });
