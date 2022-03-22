@@ -52,4 +52,41 @@ describe('book-store routes', () => {
     const res = await request(app).get(`/api/v1/publishers/${publisher.id}`);
     expect(res.body).toEqual(publisher);
   });
+  it('should be able to update publisher by id', async () => {
+    const publisher = await Publisher.insert({
+      name: 'test',
+      city: 'astoria',
+      state: 'OR',
+      country: 'USA',
+    });
+
+    const res = await request(app)
+      .patch(`/api/v1/publishers/${publisher.id}`)
+      .send({ city: 'portland' });
+
+    const expected = {
+      id: publisher.id,
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    };
+    
+    expect(res.body).toEqual(expected);
+    expect(await Publisher.getPublisherById(publisher.id)).toEqual(expected);
+  });
+  it('should delete publisher by ID', async () => {
+    const expected = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+
+    const res = await request(app)
+      .delete(`/api/v1/publishers/${expected.id}`);
+    
+    expect(res.body).toEqual(expected);
+    expect(await Publisher.getPublisherById(expected.id)).toBeNull();
+  });
 });
