@@ -20,4 +20,11 @@ describe('book-store routes', () => {
 
     expect(res.body).toEqual({ id: expect.any(String), ...reviewer });
   });
+
+  it('gets a list of reviewers', async () => {
+    await Reviewer.insert({ name: 'Sally', company: 'The Cool Company' });
+    const res = await request(app).get('/api/v1/reviewers');
+
+    expect(res.body).toEqual([{ id: expect.any(String), name: 'Sally', company: 'The Cool Company' }]);
+  });
 });
