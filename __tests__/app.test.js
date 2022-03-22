@@ -11,4 +11,16 @@ describe('book-store routes', () => {
   afterAll(() => {
     pool.end();
   });
+  it('should create a publisher', async () => {
+    const res = await request(app)
+      .post('/api/v1/publishers')
+      .send({ name: 'test', city: 'portland', state: 'OR', country: 'USA' });
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+  });
 });
