@@ -49,4 +49,40 @@ describe('author routes', () => {
     expect(res.body).toEqual(expected);
   });
 
+  test('should get an author by id', async () => {
+    const author = await Author.insert({
+      name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH'
+    });
+
+    // eslint-disable-next-line
+    const regex = /\"/ig;
+
+    const expected = {
+      id: expect.any(String),
+      name: 'Dan Brown',
+      dob: JSON.stringify(author.dob).replace(regex, ''),
+      pob: 'Exeter, NH'
+    };
+
+    const res = await request(app).get(`/api/v1/authors/${author.id}`);
+
+    expect(res.body).toEqual(expected);
+  });
+
+  // test('should update an author by id', async () => {
+  //   const author = await Author.insert({
+  //     name: 'Dan Brown',
+  //     dob: new Date('1964-06-22'),
+  //     pob: 'Exeter, NH'
+  //   });
+
+  //   const res = await request(app)
+  //   .patch('/api/v1/author')
+  //   .send({
+
+  //   })
+  // })
+
 });
