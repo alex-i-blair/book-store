@@ -42,4 +42,14 @@ describe('book-store routes', () => {
       },
     ]);
   });
+  it('should be able to get publisher by id', async () => {
+    const publisher = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+    const res = await request(app).get(`/api/v1/publishers/${publisher.id}`);
+    expect(res.body).toEqual(publisher);
+  });
 });
