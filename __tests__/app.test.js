@@ -59,7 +59,7 @@ describe('book-store routes', () => {
       state: 'OR',
       country: 'USA',
     });
-    
+
     const res = await request(app)
       .patch(`/api/v1/publishers/${publisher.id}`)
       .send({ city: 'portland' });
@@ -74,5 +74,19 @@ describe('book-store routes', () => {
     
     expect(res.body).toEqual(expected);
     expect(await Publisher.getPublisherById(publisher.id)).toEqual(expected);
+  });
+  it('should delete publisher by ID', async () => {
+    const expected = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+
+    const res = await request(app)
+      .delete(`/api/v1/publishers/${expected.id}`);
+    
+    expect(res.body).toEqual(expected);
+    expect(await Publisher.getPublisherById(expected.id)).toBeNull();
   });
 });
