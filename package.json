@@ -1,0 +1,40 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config",
+    "test:watch": "npm run test -- --watch",
+    "start": "node -r dotenv/config server.js",
+    "start:watch": "nodemon -r dotenv/config server.js",
+    "setup-db": "node -r dotenv/config setup-db.js",
+    "setup-heroku": "heroku run npm run setup-db"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/eslint-plugin": "^7.17.7",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
+    "@types/jest": "^27.4.1",
+    "@types/pg": "^8.6.5",
+    "eslint": "^8.11.0",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.0",
+    "supertest": "^6.2.2"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "pg": "^8.7.3"
+  }
+}
