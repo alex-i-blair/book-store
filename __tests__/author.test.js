@@ -14,37 +14,37 @@ describe('author routes', () => {
   });
 
   it('should create an author', async () => {
-    const res = await request(app)
-      .post('/api/v1/authors')
-      .send({
-        name: 'Dan Brown',
-        dob: '1964-06-22',
-        pob: 'Exeter, NH'
-      });
+    const res = await request(app).post('/api/v1/authors').send({
+      name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH',
+    });
 
     const expected = {
       id: expect.any(String),
       name: 'Dan Brown',
       dob: res.body.dob,
-      pob: 'Exeter, NH'
+      pob: 'Exeter, NH',
     };
 
     expect(res.body).toEqual(expected);
   });
 
-  it ('should get all authors', async () => {
+  it('should get all authors', async () => {
     const author = await Author.insert({
       name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH',
     });
 
-    const expected = [{
-      id: author.id,
-      name: author.name
-    }
+    const expected = [
+      {
+        id: author.id,
+        name: author.name,
+      },
     ];
 
-    const res = await request(app)
-      .get('/api/v1/authors');
+    const res = await request(app).get('/api/v1/authors');
 
     expect(res.body).toEqual(expected);
   });
@@ -53,17 +53,14 @@ describe('author routes', () => {
     const author = await Author.insert({
       name: 'Dan Brown',
       dob: '1964-06-22',
-      pob: 'Exeter, NH'
+      pob: 'Exeter, NH',
     });
-
-    // eslint-disable-next-line
-    const regex = /\"/ig;
 
     const expected = {
       id: expect.any(String),
       name: 'Dan Brown',
-      dob: JSON.stringify(author.dob).replace(regex, ''),
-      pob: 'Exeter, NH'
+      dob: author.dob,
+      pob: 'Exeter, NH',
     };
 
     const res = await request(app).get(`/api/v1/authors/${author.id}`);
@@ -71,18 +68,24 @@ describe('author routes', () => {
     expect(res.body).toEqual(expected);
   });
 
-  // test('should update an author by id', async () => {
-  //   const author = await Author.insert({
-  //     name: 'Dan Brown',
-  //     dob: new Date('1964-06-22'),
-  //     pob: 'Exeter, NH'
-  //   });
+  it('should update an author by id', async () => {
+    const author = await Author.insert({
+      name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH',
+    });
 
-  //   const res = await request(app)
-  //   .patch('/api/v1/author')
-  //   .send({
+    const res = await request(app)
+      .patch(`/api/v1/authors/${author.id}`)
+      .send({ name: 'Philip Pullman' });
 
-  //   })
-  // })
-
+    const expected = {
+      id: author.id,
+      name: 'Philip Pullman',
+      dob: author.dob,
+      pob: 'Exeter, NH',
+    };
+    expect(res.body).toEqual(expected);
+    expect(await Author.getAuthor(author.id)).toEqual(expected);
+  });
 });
