@@ -88,4 +88,14 @@ describe('author routes', () => {
     expect(res.body).toEqual(expected);
     expect(await Author.getAuthor(author.id)).toEqual(expected);
   });
+  it('should be able to delete an author', async () => {
+    const author = await Author.insert({
+      name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH',
+    });
+    const res = await request(app).delete(`/api/v1/authors/${author.id}`);
+    expect(res.body).toEqual(author);
+    expect(await Author.getAuthor(author.id)).toBeNull();
+  });
 });
