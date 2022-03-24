@@ -34,4 +34,24 @@ describe('book-store routes', () => {
     expect(res.body).toEqual(expected);
   });
 
+  it('should get all reviews', async () => {
+    await Review.insert({
+      rating: 3,
+      reviewer: 1,
+      review: 'amazing book',
+      book: 1
+    });
+
+    const res = await request(app)
+      .get('/api/v1/reviews');
+
+    expect(res.body).toEqual([{
+      id: expect.any(String),
+      rating: 3,
+      reviewer: expect.any(String),
+      review: 'amazing book',
+      book: expect.any(String)
+    }]);
+  });
+
 });
