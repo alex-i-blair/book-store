@@ -54,4 +54,19 @@ describe('book-store routes', () => {
     }]);
   });
 
+  // it('get a review by its id', async () => {
+
+  //   const review = await Review.insert({
+  //     rating: 3,
+  //     reviewer: 1,
+  //     review: 'amazing book',
+  //     book: 1
+  //   });
+
+  //   const res = await request(app)
+  //     .get(`/api/v1/reviews/${review.id}`);
+
+  //   expect(res.body).toEqual(review);
+  // });
+
 });
