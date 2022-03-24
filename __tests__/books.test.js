@@ -31,4 +31,22 @@ describe('book routes', () => {
 
     expect(res.body).toEqual(expected);
   });
+
+  it('should get all books', async () => {
+    await Book.insert({
+      title: 'Bobs Burgers',
+      publisher: 1,
+      released: 2000
+    });
+
+    const res = await request(app)
+      .get('/api/v1/books');
+
+    expect(res.body).toEqual([{
+      id: expect.any(String),
+      title: 'Bobs Burgers',
+      publisher: expect.any(String),
+      released: 2000
+    }]);
+  });
 });
