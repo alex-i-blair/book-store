@@ -3,6 +3,9 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const Book = require('../lib/models/Book');
+const Publisher = require('../lib/models/Publisher');
+const Author = require('../lib/models/Author');
+const Review = require('../lib/models/Review');
 
 describe('book routes', () => {
   beforeEach(() => {
@@ -51,15 +54,41 @@ describe('book routes', () => {
   });
 
   it('should get single row on books table by ID', async () => {
+    const newPublisher = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA'
+    });
+
+    await Author.insert({
+      name: 'Dan Brown',
+      dob: '1964-06-22',
+      pob: 'Exeter, NH',
+    });
+
+    const newAuthors = await Author.getAllAuthors();
+
+    await Review.insert({
+      rating: 3,
+      reviewer: 1,
+      review: 'amazing book',
+      book: 1
+    });
+
+    const newReviews = await Review.getAllReviews();
+
     const book = await Book.insert({
       title: 'Bobs Burgers',
-      publisher: 1,
-      released: 2000
+      released: 2000,
+      publisher: newPublisher,
+      authors: newAuthors,
+      reviews: newReviews
     });
 
     const res = await request(app)
       .get(`/api/v1/books/${book.id}`);
 
-    expect(res.body).toEqual(book);
+    expect(res.body).toEqual({ id: expect.any(String), ...book });
   });
 });
