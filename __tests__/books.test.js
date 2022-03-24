@@ -49,4 +49,17 @@ describe('book routes', () => {
       released: 2000
     }]);
   });
+
+  it('should get single row on books table by ID', async () => {
+    const book = await Book.insert({
+      title: 'Bobs Burgers',
+      publisher: 1,
+      released: 2000
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/books/${book.id}`);
+
+    expect(res.body).toEqual(book);
+  });
 });
