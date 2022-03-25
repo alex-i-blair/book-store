@@ -6,6 +6,7 @@ const Book = require('../lib/models/Book');
 const Publisher = require('../lib/models/Publisher');
 const Author = require('../lib/models/Author');
 const Review = require('../lib/models/Review');
+const Reviewer = require('../lib/models/Reviewer');
 
 describe('book routes', () => {
   beforeEach(() => {
@@ -60,6 +61,12 @@ describe('book routes', () => {
       country: 'USA',
     });
 
+    const book = await Book.insert({
+      title: 'Bobs Burgers',
+      released: 2000,
+      publisher: newPublisher.id
+    });
+
     await Author.insert({
       name: 'Dan Brown',
       dob: '1964-06-22',
@@ -67,26 +74,21 @@ describe('book routes', () => {
     });
     const newAuthors = await Author.getAllAuthors();
 
-    console.log('newAuthors ===', newAuthors);
+    const newReviewer = await Reviewer.insert({
+      name: 'Billy',
+      company: 'alchemy'
+    });
 
     await Review.insert({
       rating: 3,
-      reviewer: 1,
+      reviewer: newReviewer.id,
       review: 'amazing book',
-      book: 1,
+      book: book.id,
     });
     const newReviews = await Review.getAllReviews();
 
-    console.log('newReviews ===', newReviews);
-    const book = await Book.insert({
-      title: 'Bobs Burgers',
-      released: 2000,
-      publisher: newPublisher.id
-    });
-
     await book.addAuthorById(newAuthors[0].id);
 
-    console.log('BOOK', book);
 
     const res = await request(app).get(`/api/v1/books/${book.id}`);
 
