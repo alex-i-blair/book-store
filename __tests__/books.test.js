@@ -17,19 +17,17 @@ describe('book routes', () => {
   });
 
   it('should create a book', async () => {
-    const res = await request(app)
-      .post('/api/v1/books')
-      .send({
-        title: 'Bobs Burgers',
-        publisher: 1,
-        released: 2000
-      });
+    const res = await request(app).post('/api/v1/books').send({
+      title: 'Bobs Burgers',
+      publisher: 1,
+      released: 2000,
+    });
 
     const expected = {
       id: expect.any(String),
       title: 'Bobs Burgers',
       publisher: res.body.publisher,
-      released: 2000
+      released: 2000,
     };
 
     expect(res.body).toEqual(expected);
@@ -39,18 +37,19 @@ describe('book routes', () => {
     await Book.insert({
       title: 'Bobs Burgers',
       publisher: 1,
-      released: 2000
+      released: 2000,
     });
 
-    const res = await request(app)
-      .get('/api/v1/books');
+    const res = await request(app).get('/api/v1/books');
 
-    expect(res.body).toEqual([{
-      id: expect.any(String),
-      title: 'Bobs Burgers',
-      publisher: expect.any(String),
-      released: 2000
-    }]);
+    expect(res.body).toEqual([
+      {
+        id: expect.any(String),
+        title: 'Bobs Burgers',
+        publisher: expect.any(String),
+        released: 2000,
+      },
+    ]);
   });
 
   it('should get single row on books table by ID', async () => {
@@ -58,7 +57,7 @@ describe('book routes', () => {
       name: 'test',
       city: 'portland',
       state: 'OR',
-      country: 'USA'
+      country: 'USA',
     });
 
     await Author.insert({
@@ -66,29 +65,36 @@ describe('book routes', () => {
       dob: '1964-06-22',
       pob: 'Exeter, NH',
     });
-
     const newAuthors = await Author.getAllAuthors();
+
+    console.log('newAuthors ===', newAuthors);
 
     await Review.insert({
       rating: 3,
       reviewer: 1,
       review: 'amazing book',
-      book: 1
+      book: 1,
     });
-
     const newReviews = await Review.getAllReviews();
 
+    console.log('newReviews ===', newReviews);
     const book = await Book.insert({
       title: 'Bobs Burgers',
       released: 2000,
-      publisher: newPublisher,
+      publisher: newPublisher.id,
       authors: newAuthors,
-      reviews: newReviews
+      reviews: newReviews,
     });
 
-    const res = await request(app)
-      .get(`/api/v1/books/${book.id}`);
+    const res = await request(app).get(`/api/v1/books/${book.id}`);
 
-    expect(res.body).toEqual({ id: expect.any(String), ...book });
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      title: 'Bobs Burgers',
+      released: 2000,
+      publisher: newPublisher.id,
+      authors: newAuthors,
+      reviews: newReviews,
+    });
   });
 });

@@ -36,9 +36,6 @@ describe('book-store routes', () => {
       {
         id: expect.any(String),
         name: 'test',
-        city: 'portland',
-        state: 'OR',
-        country: 'USA',
       },
     ]);
   });
@@ -71,7 +68,7 @@ describe('book-store routes', () => {
       state: 'OR',
       country: 'USA',
     };
-    
+
     expect(res.body).toEqual(expected);
     expect(await Publisher.getPublisherById(publisher.id)).toEqual(expected);
   });
@@ -83,9 +80,8 @@ describe('book-store routes', () => {
       country: 'USA',
     });
 
-    const res = await request(app)
-      .delete(`/api/v1/publishers/${expected.id}`);
-    
+    const res = await request(app).delete(`/api/v1/publishers/${expected.id}`);
+
     expect(res.body).toEqual(expected);
     expect(await Publisher.getPublisherById(expected.id)).toBeNull();
   });
