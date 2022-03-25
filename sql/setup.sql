@@ -44,6 +44,6 @@ CREATE TABLE reviews (
 );
 
 CREATE TABLE books_authors (
-  book_id BIGINT REFERENCES books(id),
-  author_id BIGINT REFERENCES authors(id) 
+  book_id BIGINT REFERENCES books (id),
+  author_id BIGINT REFERENCES authors (id)
 );
