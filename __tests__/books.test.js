@@ -53,7 +53,7 @@ describe('book routes', () => {
     ]);
   });
 
-  it.only('should get single row on books table by ID', async () => {
+  it('should get single row on books table by ID', async () => {
     const newPublisher = await Publisher.insert({
       name: 'test',
       city: 'portland',

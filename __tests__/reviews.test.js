@@ -3,6 +3,8 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const Review = require('../lib/models/Review');
+const Book = require('../lib/models/Book');
+const Publisher = require('../lib/models/Publisher');
 
 describe('book-store routes', () => {
   beforeEach(() => {
@@ -35,11 +37,24 @@ describe('book-store routes', () => {
   });
 
   it('should get all reviews', async () => {
+    const newPublisher = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'OR',
+      country: 'USA',
+    });
+
+    const book = await Book.insert({
+      title: 'Bobs Burgers',
+      released: 2000,
+      publisher: newPublisher.id
+    });
+    
     await Review.insert({
       rating: 3,
       reviewer: 1,
       review: 'amazing book',
-      book: 1
+      book: book.id
     });
 
     const res = await request(app)
