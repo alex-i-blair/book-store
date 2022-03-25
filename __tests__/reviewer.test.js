@@ -45,12 +45,12 @@ describe('book-store routes', () => {
     const book = await Book.insert({
       title: 'Bobs Burgers',
       released: 2000,
-      publisher: newPublisher.id
+      publisher: newPublisher.id,
     });
 
     const newReviewer = await Reviewer.insert({
       name: 'Billy',
-      company: 'alchemy'
+      company: 'alchemy',
     });
 
     await Review.insert({
@@ -63,12 +63,19 @@ describe('book-store routes', () => {
     const newReviews = await Review.getAllReviews();
 
     const res = await request(app).get(`/api/v1/reviewers/${newReviewer.id}`);
-    console.log(res.body);
     expect(res.body).toEqual({
       id: expect.any(String),
       name: newReviewer.name,
       company: newReviewer.company,
-      reviews: [{ id: newReviews.id, rating: newReviews.rating, review: newReviews.review, book_id: newReviews[0].book, book_title: book.title }]
+      reviews: [
+        {
+          id: newReviews.id,
+          rating: newReviews.rating,
+          review: newReviews.review,
+          book_id: newReviews[0].book,
+          book_title: book.title,
+        },
+      ],
     });
   });
 
@@ -84,7 +91,7 @@ describe('book-store routes', () => {
   //   //   review: 'amazing book',
   //   //   book: book.id,
   //   // });
-    
+
   //   // const newReviews = await Review.getAllReviews();
 
   //   const res = await request(app)
@@ -101,15 +108,15 @@ describe('book-store routes', () => {
   //   expect(await Reviewer.findReviewerById(reviewer.id)).toEqual(expected);
   // });
 
-//   it('deletes a reviewer by id', async () => {
-//     const expected = await Reviewer.insert({
-//       name: 'Sally',
-//       company: 'The Cool Company',
-//     });
-//     const res = await request(app).delete(`/api/v1/reviewers/${expected.id}`);
+  //   it('deletes a reviewer by id', async () => {
+  //     const expected = await Reviewer.insert({
+  //       name: 'Sally',
+  //       company: 'The Cool Company',
+  //     });
+  //     const res = await request(app).delete(`/api/v1/reviewers/${expected.id}`);
 
-//     expect(res.body).toEqual(expected);
-//     expect(await Reviewer.findReviewerById(expected.id)).toBeNull();
-//   });
-// 
+  //     expect(res.body).toEqual(expected);
+  //     expect(await Reviewer.findReviewerById(expected.id)).toBeNull();
+  //   });
+  //
 });

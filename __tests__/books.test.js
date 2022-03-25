@@ -64,7 +64,7 @@ describe('book routes', () => {
     const book = await Book.insert({
       title: 'Bobs Burgers',
       released: 2000,
-      publisher: newPublisher.id
+      publisher: newPublisher.id,
     });
 
     await Author.insert({
@@ -76,7 +76,7 @@ describe('book routes', () => {
 
     const newReviewer = await Reviewer.insert({
       name: 'Billy',
-      company: 'alchemy'
+      company: 'alchemy',
     });
 
     await Review.insert({
@@ -85,10 +85,10 @@ describe('book routes', () => {
       review: 'amazing book',
       book: book.id,
     });
-    const newReviews = await Review.getAllReviews();
+    const newReviews = await Review.getReviewsForBook();
+    console.log(newReviews);
 
     await book.addAuthorById(newAuthors[0].id);
-
 
     const res = await request(app).get(`/api/v1/books/${book.id}`);
 
