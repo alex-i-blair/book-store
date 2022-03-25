@@ -63,9 +63,9 @@ describe('book-store routes', () => {
     expect(res.body).toEqual([{
       id: expect.any(String),
       rating: 3,
-      reviewer: expect.any(String),
       review: 'amazing book',
-      book: expect.any(String)
+      book_id: book.id,
+      book_title: book.title
     }]);
   });
 
