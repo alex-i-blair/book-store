@@ -85,7 +85,7 @@ describe('book routes', () => {
       review: 'amazing book',
       book: book.id,
     });
-    const newReviews = await Review.getReviewsForBook();
+    const newReviews = await Review.getAllReviews();
     console.log(newReviews);
 
     await book.addAuthorById(newAuthors[0].id);
