@@ -53,7 +53,7 @@ describe('book routes', () => {
     ]);
   });
 
-  it.only('should get single row on books table by ID', async () => {
+  it('should get single row on books table by ID', async () => {
     const newPublisher = await Publisher.insert({
       name: 'test',
       city: 'portland',
@@ -64,7 +64,7 @@ describe('book routes', () => {
     const book = await Book.insert({
       title: 'Bobs Burgers',
       released: 2000,
-      publisher: newPublisher.id
+      publisher: newPublisher.id,
     });
 
     await Author.insert({
@@ -76,7 +76,7 @@ describe('book routes', () => {
 
     const newReviewer = await Reviewer.insert({
       name: 'Billy',
-      company: 'alchemy'
+      company: 'alchemy',
     });
 
     await Review.insert({
@@ -85,10 +85,8 @@ describe('book routes', () => {
       review: 'amazing book',
       book: book.id,
     });
-    const newReviews = await Review.getAllReviews();
 
     await book.addAuthorById(newAuthors[0].id);
-
 
     const res = await request(app).get(`/api/v1/books/${book.id}`);
 
@@ -98,7 +96,14 @@ describe('book routes', () => {
       released: 2000,
       publisher: newPublisher.id,
       authors: [{ id: newAuthors[0].id, name: newAuthors[0].name }],
-      reviews: newReviews,
+      reviews: [
+        {
+          id: expect.any(String),
+          rating: 3,
+          review: 'amazing book',
+          reviewer: newReviewer.id,
+        },
+      ],
     });
   });
 });

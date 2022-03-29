@@ -3,6 +3,9 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const Reviewer = require('../lib/models/Reviewer');
+const Book = require('../lib/models/Book');
+const Publisher = require('../lib/models/Publisher');
+const Review = require('../lib/models/Review');
 
 describe('book-store routes', () => {
   beforeEach(() => {
@@ -30,20 +33,33 @@ describe('book-store routes', () => {
     ]);
   });
 
-  //   // this test is incomplete: it needs a book insert
-  //   it('get a reviewer by id', async () => {
-  //     const reviewer = await Reviewer.insert({ name: 'Sally', company: 'The Cool Company', reviews: [{
-  //       id: expect.any(String),
-  //       rating: 5,
-  //       review: 'Very good book!',
-  //       book_id: 1,
-  //       book_title: 'The Road'
-  //     }]
-  //     });
-  //     const res = await request(app).get(`/api/v1/reviewers/${reviewer.id}`);
+  // this test is incomplete: it needs a book insert
+  it('get a reviewer by id', async () => {
+    const reviewer = await Reviewer.insert({
+      name: 'Sally',
+      company: 'The Cool Company',
+    });
+    const publisher = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'or',
+      country: 'usa',
+    });
+    const book = await Book.insert({
+      title: 'Bobs Burgers',
+      publisher: publisher.id,
+      released: 2000,
+    });
+    await Review.insert({
+      rating: 3,
+      reviewer: reviewer.id,
+      review: 'it was delicious',
+      book: book.id,
+    });
+    const res = await request(app).get(`/api/v1/reviewers/${reviewer.id}`);
 
-  //     expect(res.body).toEqual(reviewer);
-  //   });
+    expect(res.body).toEqual(reviewer);
+  });
 
   it('updates a reviewer by id', async () => {
     const reviewer = await Reviewer.insert({
