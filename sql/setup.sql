@@ -40,7 +40,7 @@ CREATE TABLE reviews (
   rating INT NOT NULL,
   reviewer BIGINT NOT NULL,
   review TEXT NOT NULL,
-  book BIGINT NOT NULL
+  book BIGINT REFERENCES books (id)
 );
 
 CREATE TABLE books_authors (
