@@ -38,7 +38,7 @@ CREATE TABLE reviewers (
 CREATE TABLE reviews (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   rating INT NOT NULL,
-  reviewer BIGINT NOT NULL,
+  reviewer BIGINT REFERENCES reviewers (id),
   review TEXT NOT NULL,
   book BIGINT REFERENCES books (id)
 );

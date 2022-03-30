@@ -91,4 +91,36 @@ describe('book-store routes', () => {
     expect(res.body).toEqual(expected);
     expect(await Reviewer.findReviewerById(expected.id)).toBeNull();
   });
+
+  it('should not be able to delete reviewer if associated with review', async () => {
+
+    const publisher = await Publisher.insert({
+      name: 'test',
+      city: 'portland',
+      state: 'or',
+      country: 'usa',
+    });
+
+    const book = await Book.insert({
+      title: 'Bobs Burgers',
+      publisher: publisher.id,
+      released: 2000,
+    });
+
+    const reviewer = await Reviewer.insert({
+      name: 'Sally',
+      company: 'The Cool Company',
+    });
+
+    await Review.insert({
+      rating: 3,
+      reviewer: reviewer.id,
+      review: 'it was delicious',
+      book: book.id,
+    });
+
+    const res = await request(app).delete(`/api/v1/reviewers/${reviewer.id}`);
+
+    expect(res.body).toEqual({message: 'Cannot delete reviewer', status: 403})
+  });
 });
