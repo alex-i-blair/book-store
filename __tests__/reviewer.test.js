@@ -93,7 +93,6 @@ describe('book-store routes', () => {
   });
 
   it('should not be able to delete reviewer if associated with review', async () => {
-
     const publisher = await Publisher.insert({
       name: 'test',
       city: 'portland',
@@ -121,6 +120,9 @@ describe('book-store routes', () => {
 
     const res = await request(app).delete(`/api/v1/reviewers/${reviewer.id}`);
 
-    expect(res.body).toEqual({message: 'Cannot delete reviewer', status: 403})
+    expect(res.body).toEqual({
+      message: 'Cannot delete reviewer',
+      status: 403,
+    });
   });
 });

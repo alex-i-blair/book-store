@@ -61,7 +61,6 @@ describe('book-store routes', () => {
     });
 
     const res = await request(app).get('/api/v1/reviews');
-    console.log('RESBODY!!', res.body);
     expect(res.body).toEqual([
       {
         id: expect.any(String),
